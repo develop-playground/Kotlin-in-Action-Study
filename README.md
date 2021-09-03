@@ -1,2 +1,16 @@
 # Kotlin-in-Action-Study
-Kotlin in Action 스터디 자료 저장소
+Kotlin in Action 스터디 자료 저장소입니다.
+
+<br/>
+
+## Wiki
+
+1. [규칙](https://github.com/develop-playground/Kotlin-in-Action-Study/wiki/Rule)
+2. [진행 방식](https://github.com/develop-playground/Kotlin-in-Action-Study/wiki/%EC%A7%84%ED%96%89-%EB%B0%A9%EC%8B%9D)
+
+<br/>
+
+## Topics
+
+- 
+
