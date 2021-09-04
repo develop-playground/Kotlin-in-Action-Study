@@ -13,7 +13,7 @@ Kotlin in Action 스터디 자료 저장소입니다.
 
 <br/>
 
-## Topics
+## Contents
 
-- 
+- [Chapter1. 코틀린이란 무엇이며, 왜 필요한가?](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter1.md)
 
