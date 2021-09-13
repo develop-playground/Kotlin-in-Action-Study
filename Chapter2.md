@@ -449,15 +449,12 @@ eval 함수에서 e의 타입이 Num인지 검사한 다음 부분에서 컴파�
 
 ### 2.3.6 리팩토링: if를 when으로 변경
 ```kotlin
-    fun eval(e: Expr): Int =
-        when (e) {
-            is Num ->
-                e.value
-            is Sum ->
-                eval(e.right) + eval(e.left)
-            else ->
-                throw IllegalArgumentException("Unknown Exception")
-        }
+fun eval(e: Expr): Int =
+	when (e) {
+		is Num -> e.value
+		is Sum -> eval(e.right) + eval(e.left)
+		else -> throw IllegalArgumentException("Unknown Exception")
+	}
 ```
 
 이 예제는 받은 값의 타입을 검사하는 when 분기를 보여준다. 앞의 if 예제와 마찬가지로 타입을 검사하고 나면 스마트 캐스트가 이루어진다. 
@@ -470,20 +467,20 @@ when과 if 식을 사용한 함수를 서로 비교해보고, when으로 if를 �
 if나 when 모두 분기에 블록을 사용할 수 있다. 그런 경우 블록의 마지막 문장이 블록 전체의 결과가 된다. 예제로 봤던 함수에 로그를 추가하고 싶다면 각 분기를 블록으로 만들고 블록의 맨 마지막에 그 분기의 결과 값을 위치시키면 된다.
 
 ```kotlin
-    fun evalWithLogging(e: Expr): Int =
-        when (e) {
-            is Num -> {
-                println("num: ${e.value}")
-                e.value  //e의 타입이 Num이면 e.value 반환
-            }
-            is Sum -> {
-                val left = evalWithLogging(e.left)
-                val right = evalWithLogging(e.right)
-                println("sum: $left + $right")
-                left + right //e의 타입이 Sum이면 left+right 반환
-            }
-            else -> throw   IllegalArgumentException("Unknown expression")
-        }
+fun evalWithLogging(e: Expr): Int =
+	when (e) {
+		is Num -> {
+			println("num: ${e.value}")
+			e.value  //e의 타입이 Num이면 e.value 반환
+		}
+	is Sum -> {
+			val left = evalWithLogging(e.left)
+			val right = evalWithLogging(e.right)
+			println("sum: $left + $right")
+			left + right //e의 타입이 Sum이면 left+right 반환
+		}
+		else -> throw   IllegalArgumentException("Unknown expression")
+}
 ```
 
 블록의 마지막 식이 블록의 결과 라는 규칙은 블록이 값을 만들어내야 하는 경우 항상 성립한다. 앞에서 설명한 대로 이 규칙은 함수에 대해서는 성립하지 않는다. 식이 본문인 함수는 블록을 본문으로 가질 수 없고 블록이 본문인 함수는 내부에 return문이 반드시 있어야 한다.
@@ -500,14 +497,14 @@ while은 자바와 동일하므로 간략하게 다루고 넘어가며, for는 �
 코틀린에는 while과 do-while 루프가 있다. 
 
 ```kotlin
-    while(조건) {
-    	//조건이 참인 동안 본문을 반복 실행
-    } 
+while(조건) {
+	//조건이 참인 동안 본문을 반복 실행
+} 
 
-    do {
-    	//맨 처음에 무조건 본문을 한 번 실행한 다음,
-    	// 조건이 참인 동안 본문을 반복 실행
-    } while(조건)
+do {
+	//맨 처음에 무조건 본문을 한 번 실행한 다음,
+	// 조건이 참인 동안 본문을 반복 실행
+} while(조건)
 ```
 <br/>
 
@@ -520,25 +517,24 @@ while은 자바와 동일하므로 간략하게 다루고 넘어가며, for는 �
 피즈버즈게임을 위해 정수 범위를 사용해보자. 참가자는 순차적으로 수를 세면서 3으로 나눠떨어지는 수에 대해서는 피즈, 5로 나눠떨어지면 버즈라고 말한다. 3과5로 모두 나눠떨어지면 피즈버즈라고 말해야 한다.
 
 ```kotlin
-    fun fizzBuzz(i: Int) = when {
-        i % 15 == 0 -> "FizzBuzz"
-        i % 3 == 0 -> "Fizz"
-        i % 5 == 0 -> "Buzz"
-        else -> "$i"
-    }
-    >>> for (i in 1..100) {
-    		...print(fizzBuzz(i))
-    		...}
-    }
+fun fizzBuzz(i: Int) = when {
+	i % 15 == 0 -> "FizzBuzz"
+	i % 3 == 0 -> "Fizz"
+	i % 5 == 0 -> "Buzz"
+	else -> "$i"
+}
+
+for (i in 1..100) {
+	print(fizzBuzz(i))
+}
 ```
 
 이제는 100부터 거꾸로 세되 짝수만으로 게임을 진행해보자.
 
 ```kotlin
-    >>> for (i in 100 downTo 1 step 2) {
-    		...print(fizzBuzz(i))
-    		...}
-    }
+for (i in 100 downTo 1 step 2) {
+		print(fizzBuzz(i))
+}
 ```
 
 여기서는 증가 값 step을 갖는 수열에 대해 이터레이션한다. 증가 값을 사용하면 수를 건너 뛸 수 있다. 증가 값을 음수로 만들면 정방향 수열이 아닌 역방향 수열을 만들 수 있다. 
@@ -551,18 +547,18 @@ while은 자바와 동일하므로 간략하게 다루고 넘어가며, for는 �
 문자에 대한 2진 표현을 출력하는 프로그램을 살펴보자. 이대 2진 표현을 맵에 저장하자. 다음 코드는 맵을 만들고, 몇 글자에 대한 2진 표현으로 맵을 채운 다음, 그 맵의 내용을 출력한다.
 
 ```kotlin
-    val binaryReps = TreeMap<Char, String>()
+val binaryReps = TreeMap<Char, String>()
 
-    fun binaryFunc() {
-        for (c in 'A'..'F') {
-            val binary = Integer.toBinaryString(c.toInt())
-            binaryReps[c] = binary
-        }
+fun binaryFunc() {
+	for (c in 'A'..'F') {
+		val binary = Integer.toBinaryString(c.toInt())
+		binaryReps[c] = binary
+	}
 
-        for ((letter, binary) in binaryReps) {
-            println("$letter = $binary")
-        }
-    }
+	for ((letter, binary) in binaryReps) {
+		println("$letter = $binary")
+	}
+}
 ```
 
 `..` 연산자를 숫자 타입의 값뿐 아니라 문자 타입의 값에도 적용할 수 있다. 위 코드는 for 루프를 사용해 이터레이션하려난 컬렉션의 원소를 푸는 방법을 보여준다. 원소를 풀어서 letter와 binary라는 두 변수에 저장하며, letter에는 키가 들어가고, binary에는 2진 표현이 들어간다.
@@ -575,18 +571,18 @@ while은 자바와 동일하므로 간략하게 다루고 넘어가며, for는 �
 `in` 연산자를 사용해 어떤 값이 범위에 속하는지 검사할 수 있다. 반대로 `!in`을 사용하면 어떤 값이 범위에 속하지 않는지 검사할 수 있다. 다음은 어떤 문자가 정해진 문자의 범위에 속하는지를 검사하는 방법을 보여준다.
 
 ```kotlin
-    fun isLetter(c: Char) = c in 'a'..'z' || c in 'A'..'Z'
-    fun isNotDigit(c: Char) = c !in '0'..'9'
+fun isLetter(c: Char) = c in 'a'..'z' || c in 'A'..'Z'
+fun isNotDigit(c: Char) = c !in '0'..'9'
 
-    println(isLetter('q')) -> true
-    println(isNotDigit('x')) -> true
+println(isLetter('q')) -> true
+println(isNotDigit('x')) -> true
 ```
 
 이렇게 어떤 문자가 글자인지 검사하는 방법은 간단해 보인다. 내부적으로도 교묘한 부분은 전혀 없다. 이렇게 코드를 작성해도 여전히 문자의 코드가 범위의 첫 번째 글자의 코드와 마지막 굴자의 코드 사이에 있는지를 비교한다. 하지만 그런 비교 로직은 표준 라이브러리의 범위 클래스 구현 안에 깔끔하게 감춰져 있다.
 
 ```kotlin
-    c in 'a'..'z' // 다음처럼 변환된다.
-    'a' <= c && c <= 'z'
+c in 'a'..'z' // 다음처럼 변환된다.
+'a' <= c && c <= 'z'
 ```
 
 범위는 문자에만 국한되지 않고, 비교가 가능한 클래스라면 그 클래스의 인스턴스 객체를 사용해 범위를 만들 수 있다. Comparable을 사용하는 범위의 경우 그 범위 내의 모든 객체를 항상 이터레이션하지는 못한다. 예를 들어 'Java'와 'Kotlin' 사이의 모든 문자열을 이터레이션할 수 있을까? 그럴 수 없다. 하지만 in 연산자를 사용하면 값이 범위 안에 속하는지 결정할 수 있다.
@@ -601,18 +597,18 @@ while은 자바와 동일하므로 간략하게 다루고 넘어가며, for는 �
 자바와 마찬가지로 예외를 처리하려면 try와 catch, finally 절을 함께 사용한다. 파일에서 각 줄을 읽어 수로 변환하되 그 줄이 올바른 수 형태가 아니면 null을 반환하는 다음 예제에서 그 세 가지 요소를 볼 수 있다.
 
 ```kotlin
-    fun readNumber(reader: BufferedReader): Int? {
-        try {
-            val line = reader.readLine()
-            return Integer.parseInt(line)
-        }
-        catch(e: NumberFormatException) {
-            return null
-        }
-        finally {
-            reader.close()
-        }
-    }
+fun readNumber(reader: BufferedReader): Int? {
+	try {
+		val line = reader.readLine()
+		return Integer.parseInt(line)
+	}
+	catch(e: NumberFormatException) {
+		return null
+	}
+	finally {
+		reader.close()
+	}
+}
 ```
 
 자바 코드와 가장 큰 차이는 throws 절이 코드에 없다는 점이다. 자바에서는 함수를 작성할 때 함수 선언 뒤에 throws IOException을 붙여야 한다. 이유는 IOException이 체크 예외이기 때문이다. 자바에서는 체크 예외를 명시적으로 처리해야 한다. 어떤 함수가 던질 가능성이 있는 예외나 그 함수가 호출한 다른 함수에서 발생할 수 있는 예외를 모두 catch로 처리해야 하며, 처리하지 않은 예외는 throws 절에 명시해야 한다.
@@ -625,27 +621,27 @@ while은 자바와 동일하므로 간략하게 다루고 넘어가며, for는 �
 자바와 코틀린의 중요한 차이를 살펴보기 위해 방금 살펴본 예제를 고쳐보자. finally 절을없애고 파일에서 읽은 수를 출력하는 코드를 추가하자.
 
 ```kotlin
-    fun readNumber(reader: BufferedReader) {
-        val number = try {
-            Integer.parseInt(reader.readLine())
-        } catch(e: NumberFormatException) {
-            return
-        }
-        println(number)
-    }
+fun readNumber(reader: BufferedReader) {
+	val number = try {
+		Integer.parseInt(reader.readLine())
+	} catch(e: NumberFormatException) {
+		return
+	}
+	println(number)
+}
 ```
 코틀린의 try 키워드는 if나 when과 마찬가지로 식이다. 따라서 try의 값을 변수에 대입할 수 있다. if와 달리 try의 본문을 반드시 중괄호로 둘러싸야 한다. 다른 문장과 마찬가지로 try의 본문도 내부에 여러 문장이 있으면 마지막 식의 값이 전체 결과 값이다.
 이 예제는 catch 블록 안에서 return 문을 사용한다. 따라서 예외가 발생할 경우 catch 블록 다음의 코드는 실행되지 않는다. 하지만 계속 진행하고 싶다면 catch 블록도 값을 만들어야 한다. 역시 catch 블록도 그 안의 마지막 식이 블록 전체의 값이 된다. 다음은 그런 동작을 보여준다.
 
 ```kotlin
-    fun readNumber(reader: BufferedReader) {
-        val number = try {
-            Integer.parseInt(reader.readLine())
-        } catch(e: NumberFormatException) {
-            null
-        }
-        println(number)
-    }
+fun readNumber(reader: BufferedReader) {
+	val number = try {
+		Integer.parseInt(reader.readLine())
+	} catch(e: NumberFormatException) {
+		null
+	}
+	println(number)
+}
 ```
 try 코드 블록의 실행이 정상적으로 끝나면 그 블록의 마지막 식의 값이 결과다. 예외가 발생하고 잡히면 그 예외에 해당하는 catch 블록의 값이 결과다. 위 코드에서 예외가 발생하면 함수의 결과값이 null이 된다.
 
@@ -654,7 +650,7 @@ try 코드 블록의 실행이 정상적으로 끝나면 그 블록의 마지막
 ### 2.6 요약
 
 - 함수를 정의할 때 fun 키워드를 사용한다. val과 var는 각각 읽기 전용 변수와 변경 가능한 변수를 선언할 때 쓰인다.
-- 문자열 템플릿을 사용하면 문자열을 연결하지 않아도 되므로 코드가 간결해진다. 변수 이름 앞에 **`$`**를 붙이거나, 식을 **`${식}`**처럼 둘러싸면 변수나 식의 값을 문자열 안에 넣을 수 있다.
+- 문자열 템플릿을 사용하면 문자열을 연결하지 않아도 되므로 코드가 간결해진다. 변수 이름 앞에 `$`를 붙이거나, 식을 `${식}`처럼 둘러싸면 변수나 식의 값을 문자열 안에 넣을 수 있다.
 - 코틀린에서는 값 객체 클래스를 아주 간결하게 표현할 수 있다.
 - 다른 언어에도 있는 if는 코틀린에서 식이며, 값을 만들어낸다.
 - 코틀린 when은 자바의 switch와 비슷하지만 더 강력하다.
