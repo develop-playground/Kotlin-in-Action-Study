@@ -4,6 +4,8 @@
 
 Kotlin in Action 스터디 자료 저장소입니다.
 
+# Main으로 Push
+
 <br/>
 
 ## Wiki
