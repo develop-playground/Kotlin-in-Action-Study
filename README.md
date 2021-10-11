@@ -29,7 +29,9 @@ https://github.com/MoochiPark/kotlin-in-action-pos - Daewon
 
 https://github.com/junhyung0927/Kotlin-InAction - Junhyeong
 
+https://github.com/qkrcksduf/pos - Chanyeol
 
+https://github.com/isoono/Kotlin-in-Action - Soonho
 
 <br/>
 
