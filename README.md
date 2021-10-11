@@ -33,6 +33,8 @@ https://github.com/qkrcksduf/pos - Chanyeol
 
 https://github.com/isoono/Kotlin-in-Action - Soonho
 
+https://github.com/wisoftMY/kotlin-study - Minyoung
+
 <br/>
 
 ## Contents
