@@ -17,11 +17,19 @@ Kotlin in Action 스터디 자료 저장소입니다.
 
 ### 편의점 포스기 구현하기
 
-Chapter 2 
-
 - 무엇을 구현하면 좋을까? : 메뉴 CRUD, 한 주문에 고른 메뉴의 가격 합, 하루 매출 중에 카드 결제,  현금 결제 구분하여 가격 합 출력, `enum`으로 현금/카드를 구분해서 출력, 시작, 종료, 프로세스 선택하기, 결제 방식이나 상태 고르는 기능
-- 결정된 요구 사항 - 시작, 프로세스 선택(프로세스는 자유), 종료
-- stack : 출력, 클래스, 함수, 변수, `enum`, `when`, `while`, `for`, `if-else`, `try-catch`
+
+### 저장소
+
+https://github.com/ByeongSoon/kotlin-in-action-pos - Byeongsoon
+
+https://github.com/hongbeomi/POS - Hongbeom
+
+https://github.com/MoochiPark/kotlin-in-action-pos - Daewon
+
+https://github.com/junhyung0927/Kotlin-InAction - Junhyeong
+
+
 
 <br/>
 
