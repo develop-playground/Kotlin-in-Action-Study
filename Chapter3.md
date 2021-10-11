@@ -466,9 +466,11 @@ fun main() {
 ```
 
 * 확장 함수를 만들려면 추가하려는 함수 이름 앞에 그 함수가 확장할 클래스의 이름을 덧붙이기만 하면 된다.
-* 확장할 클래스 이름을 **수신 객체 타입(receiver type)**이라 부른다. 
+
+* 확장할 클래스 이름을 **수신 객체 타입(receiver type)** 이라 부른다. 
   -> `fun String.lastChar(): Char` 에서 **`String`**
-* 확장 함수가 호출되는 대상이 되는 값(객체)을 **수신 객체(receiver object)**라고 부른다. 
+
+* 확장 함수가 호출되는 대상이 되는 값(객체)을 **수신 객체(receiver object)** 라고 부른다. 
   -> `this[this.length - 1]` 에서  **`this`**
   -> `"abc".lastChar()` 에서 **`"abc"`**
 
@@ -757,6 +759,7 @@ fun main() {
 ```
 
 * 이처럼 확장 프로퍼티는 기존 클래스 객체에 대한 프로퍼티를 추가할 수 있다.
+
 * 하지만 확장 프로퍼티는 뒷받침하는 필드가 없어서 **상태를 저장할 수는 없다.**
   그러므로 기본 게터가 제공되지 않아, **커스텀 게터를 꼭 정의해야 한다.**
 
@@ -1076,9 +1079,317 @@ fun main() {
 
 ## 5.2. 정규식과 3중 따옴표로 묶은 문자열
 
+이번에는 파일의 전체 경로명을 디렉터리, 파일 이름, 확장자로 구분하는 함수를 구현해보자.
 
+```java
+"/Users/min/kotlin-book/chapter.md"
+```
 
+* **"/Users/min/kotlin-book"** : 디렉터리
+* **"chapter"** : 파일 이름
+* **"md"** : 확장자
 
+<br/>
+
+먼저 String 확장 함수를 사용해 경로를 파싱해보자.
+
+### [ String 확장 함수를 사용해 경로 파싱하기 ]
+
+```kotlin
+fun parsePath(path: String) {
+  val directory = path.substringBeforeLast("/")
+  println("directory: $directory")
+
+  val fullName = path.substringAfterLast("/")
+  println("fullName: $fullName")
+
+  val fileName = fullName.substringBeforeLast(".")
+  println("fileName: $fileName")
+
+  val extension = fullName.substringAfterLast(".")
+  println("extension: $extension")
+}
+
+fun main() {
+  parsePath("/Users/sangminlee/README.md")
+}
+```
+
+[ 실행결과 ]
+
+```
+directory: /Users/sangminlee
+fullName: README.md
+fileName: README
+extension: md
+```
+
+* 이처럼 코틀린에서는 정규식을 사용하지 않고도 문자열을 쉽게 파싱할 수 있다.
+
+<br/>
+
+### [ 정규식을 사용해 경로 파싱하기 ]
+
+```kotlin
+fun parsePath(path: String) {
+    val regex = """(.+)/(.+)\.(.+)""".toRegex()
+    val matchResult = regex.matchEntire(path)
+    if (matchResult != null) {
+        val (directory, filename, extension) = matchResult.destructured
+        println("directory: $directory")
+        println("fillName: $filename")
+        println("extension: $extension")
+    }
+}
+
+fun main() {
+    parsePath("/Users/sangminlee/README.md")
+}
+```
+
+[ 실행결과 ]
+
+```
+directory: /Users/sangminlee
+fillName: README
+extension: md
+```
+
+* 3중 따옴표 문자열을 사용해 정규식을 사용했다.
+
+* 3중 따옴표 문자열에서는 역슬래시(\\)를 포함한 어떤 문자도 이스케이프할 필요가 없다.
+
+  ```kotlin
+  """(.+)/(.+)\.(.+)"""       
+  "(.+)/(.+)\\.(.+)"     // . 을 문자로 나타내기 위해 역슬래시(\)를 2개를 써야함.
+  ```
+
+* 이 예제에서 쓴 정규식은 슬래시와 마침표를 기준으로 경로를 세 그룹으로 분리한다.
+
+  ```
+  (.+)/(.+)\.(.+)
+  ```
+
+  * **(.+)** : 디렉터리
+  * **(.+)** : 파일 이름
+  * **(.+)** : 확장자
+
+<br/>
+
+## 5.3. 여러 줄 3중 따옴표 문자열
+
+3중 따옴표를 쓰면 줄 바꿈이 들어있는 프로그램 텍스트를 쉽게 문자열로 만들 수 있다.
+
+```kotlin
+fun main() {
+  println("""
+        *
+        **
+        ***
+        ****
+        *****
+    """.trimIndent())
+}
+```
+
+```
+*
+**
+***
+****
+*****
+```
+
+* `trimIndent()` : 들여쓰기 제거
+
+<br/>
+
+3중 따옴표는 윈도우 파일 경로를 나타낼때도 편리하다.
+
+```kotlin
+fun main() {
+    println("1. C:\\Users\\min\\kotlin")
+    println("""2. C:\Users\min\kotlin""")
+}
+```
+
+```
+1. C:\Users\min\kotlin
+2. C:\Users\min\kotlin
+```
+
+* 이처럼 3중 따옴표를 사용하면 백슬래시를 나타낼때 편리하다.
+
+<br/>
+
+# 6. 코드 다듬기: 로컬 함수와 확장
+
+코틀린에서는 함수에서 추출한 함수를 원 함수 내부에 중첩시킬 수 있다.
+
+흔히 발생하는 코드 중복을 **로컬 함수** 를 통해 어떻게 제거할 수 있는지 살펴보자.
+
+<br/>
+
+사용자를 데이터베이스에 저장하는 함수를 작성하는 예시를 살펴보자.
+
+데이터베이스에 사용자 객체를 저장하기 전에 각 필드를 검증해야 한다고 해보자.
+
+#### [ 코드 중복을 보여주는 예제 ]
+
+```kotlin
+class User(
+  val id: Int,
+  val name: String,
+  val address: String,
+)
+
+fun saveUser(user: User) {
+  // 필드 검증이 중복
+  if (user.name.isEmpty()) {
+    throw IllegalArgumentException(
+      "Can't save user ${user.id}: empty Name"
+    )
+  }
+  // 필드 검증이 중복
+  if (user.address.isEmpty()) {
+    throw IllegalArgumentException(
+      "Can't save user ${user.id}: empty Address"
+    )
+  }
+
+  // user를 데이터베이스에 저장한다.
+  println("save")
+}
+
+fun main() {
+  val user = User(1, "sangmin", "daejeon")
+  saveUser(user)
+}
+```
+
+* 필드를 검증할 때, 검증 코드를 로컬 함수로 분리하면 중복을 없애는 동시에 코드 구조를 깔끔하게 유지할 수 있다.
+
+<br/>
+
+#### [ 로컬 함수를 사용해 코드 중복 줄이기 ]
+
+```kotlin
+...
+
+fun saveUser(user: User) {
+  // 한 필드를 검증하는 로컬 함수를 정의
+  fun validate(
+    user: User,
+    value: String,
+    fieldName: String,
+  ) {
+    if (value.isEmpty()) {
+      throw IllegalArgumentException(
+        "Can't save user ${user.id}: empty $fieldName"
+      )
+    }
+  }
+
+  // 로컬 함수를 호출해서 각 필드를 검증한다.
+  validate(user, user.name, "Name")
+  validate(user, user.address, "Address")
+
+  ...
+}
+
+...
+```
+
+* 검증 로직 중복이 사라졌고, User의 다른 필드에 대한 검증도 쉽게 추가할 수 있다.
+* 하지만, User 객체를 로컬 함수에 매번 전달해야 하고 있는 점이 아쉽다.
+* 이를 개선해보자.
+
+<br/>
+
+#### [ 로컬 함수에서 바깥 함수의 파라미터 접근하기 ]
+
+```kotlin
+...
+
+fun saveUser(user: User) {
+  // User 파라미터를 사용하지 않도록 수정
+  fun validate(
+    value: String,
+    fieldName: String,
+  ) {
+    if (value.isEmpty()) {
+      // 바깥 함수의 파라미터에 직접 접근
+      //  - ${user.id}
+      throw IllegalArgumentException(
+        "Can't save user ${user.id}: empty $fieldName"
+      )
+    }
+  }
+
+  validate(user.name, "Name")
+  validate(user.address, "Address")
+
+  ...
+}
+
+...
+```
+
+<br/>
+
+위의 코드를 더 개선하고 싶다면 검증 로직을 `User` 클래스를 확장한 함수로 만들어보자.
+
+#### [ 검증 로직을 확장 함수로 추출하기 ]
+
+```kotlin
+...
+
+// 확장 함수 선언
+fun User.validateBeforeSave() {
+  fun validate(
+    value: String,
+    fieldName: String,
+  ) {
+    if (value.isEmpty()) {
+      // User의 프로퍼티를 직접 사용
+      throw IllegalArgumentException(
+        "Can't save user $id: empty $fieldName"
+      )
+    }
+  }
+
+  validate(name, "Name")
+  validate(address, "Address")
+}
+
+fun saveUser(user: User) {
+  // 확장 함수 호출
+  user.validateBeforeSave()
+
+  // user를 데이터베이스에 저장한다.
+  println("save")
+}
+
+...
+```
+
+* 이 경우 검증 로직이 `saveUser` 에서 밖에 쓰이지 않기 때문에 `User` 클래스에 포함시키지 않았다.
+* 이처럼 `User` 클래스를 간결하게 유지하면 생각해야 할 내용이 줄어들어서 **더 쉽게 코드를 파악할 수 있다.**
+* 확장 함수를 로컬 함수로 정의할 수도 있지만, 중첩된 함수의 깊이가 깊어지면 코드를 읽기가 상당히 어려워진다.
+  따라서 일반적으로는 **한 단계만 함수를 중첩시키라고 권장한다.**
+
+<br/>
+
+# 7. 요약
+
+* 코틀린은 자바 클래스를 확장해서 더 풍부한 API를 제공한다.
+* 함수 파라미터의 디폴트 값을 정의하면 오버로딩한 함수를 정의할 필요성이 줄어든다.
+* 이름 붙인 인자를 사용하면 함수 호출이 가독성을 향상시킬 수 있다.
+* 코틀린은 클래스 멤버가 아닌 최상위 함수와 프로퍼티를 직접 선언할 수 있다.
+* 확장 함수와 프로퍼티를 사용하면 외부 라이브러리의 소스코드를 바꿀 필요 없이 확장할 수 있다.
+* 중위 호출을 통해 메소드나 확장 함수를 더 깔끔한 구문으로 호출할 수 있다.
+* 코틀린은 다양한 문자열 처리 함수를 제공한다.
+* 수많은 이스케이프가 필요한 문자열의 경우 3중 따옴표 문자열을 사용하면 깔끔하게 표현할 수 있다.
 
 ---
 
