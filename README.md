@@ -45,3 +45,4 @@ https://github.com/LeeSM0518/kotlin-tutorial-project - Sangmin
 - [Chapter2. 코틀린 기초](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter2.md)
 - [Chapter3. 함수 정의와 호출](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter3.md)
 - [Chapter4. 클래스, 객체, 인터페이스](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter4.md)
+- [Chapter5.람다로 프로그래밍](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter5.md)
