@@ -49,4 +49,8 @@ https://github.com/LeeSM0518/kotlin-tutorial-project - Sangmin
 - [Chapter6. 코틀린 타입 시스템](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter6.md)
 - [Chapter7(1). 연산자 오버로딩과 기타 관계](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter7-1.md)
 - [Chapter7(2). 연산자 오버로딩과 기타 관계](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter7-2.md)
-
+- [Chapter8(1). 고차함수 : 파라미터와 반환 값으로 람다 사용](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter8-1.md)
+- [Chapter8(2). 고차함수 : 파라미터와 반환 값으로 람다 사용](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter8-2.md)
+- [Chapter9 (1). 제네릭](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter9-1.md)
+- [Chapter9 (2). 제네릭](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter9-2.md)
+- [Chapter9 (3). 제네릭](https://github.com/develop-playground/Kotlin-in-Action-Study/blob/main/Chapter9-3.md)
